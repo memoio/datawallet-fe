@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&family=Phetsarath:wght@400;700&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.paytone {
+  font-family: 'Paytone One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.phetsarath {
+  font-family: "Phetsarath", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.phetsarath2 {
+  font-family: "Phetsarath", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.bg{
+  background: linear-gradient(180deg, #000402 0%, #00110A 100%);
+}
+.card{
+  background: linear-gradient(117.75deg, #1E4874 7.14%, #0EB476 100%); 
+  border-bottom: 5px solid #05F292;
+}
+
+.bind{
+  background: linear-gradient(90deg, #05F292 0%, #214177 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+
+.tabs{
+background: linear-gradient(360deg, #066442 0%, #05F292 115.15%);}
+
+
+
+::-webkit-scrollbar{
+  display: none;
+}
