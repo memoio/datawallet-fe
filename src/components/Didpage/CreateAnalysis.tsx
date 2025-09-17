@@ -1,10 +1,39 @@
 'use client'
 import Image from 'next/image'
-import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAccount } from 'wagmi'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { createDID } from '../api/api'
 
 const CreateAnalysis = () => {
     const [handle, setHandle] = useState("Cathy")
+    const { address, isConnected } = useAccount()
+    const { openConnectModal } = useConnectModal()
+    const router = useRouter()
+    const [submitting, setSubmitting] = useState(false)
+
+    const onCreateDid = useCallback(async () => {
+        try {
+            if (!isConnected || !address) {
+                if (openConnectModal) {
+                    openConnectModal()
+                } else {
+                    alert('请先连接钱包')
+                }
+                return
+            }
+            setSubmitting(true)
+            await createDID(address)
+            router.push('/didcreate')
+        } catch (err: any) {
+            alert(err?.message || '创建 DID 失败')
+        } finally {
+            setSubmitting(false)
+        }
+    }, [isConnected, address, openConnectModal, router])
+
+
     const data = [
         {
             no: "01",
@@ -44,7 +73,13 @@ const CreateAnalysis = () => {
                             <p className='text-white text-[20px] '>0.0 MEMO+Gas Fee</p>
                         </div>
                         <div className='flex flex-col items-center gap-2 w-full'>
-                            <Link href={"/didcreate"} className='w-full h-[57px]  rounded-[42px] bg-[#05F292] flex items-center justify-center font-bold text-[16px]'>Create DID</Link>
+                            <button
+                                onClick={onCreateDid}
+                                disabled={submitting}
+                                className={`w-full h-[57px] rounded-[42px] bg-[#05F292] flex items-center justify-center font-bold text-[16px] ${submitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            >
+                                {submitting ? 'Creating...' : 'Create DID'}
+                            </button>
                             <p className='text-white'>The total cost includes account deployment and gas fees for NFT minting.</p>
                         </div>
                     </div>
@@ -119,8 +154,13 @@ const CreateAnalysis = () => {
                             <p className='text-white text-[20px] '>0.0 MEMO+Gas Fee</p>
                         </div>
                         <div className='flex flex-col items-center gap-2 w-full'>
-                            <Link href={"/create"} className='w-full h-[57px]  rounded-[42px] bg-[#05F292] flex items-center justify-center font-bold text-[16px]'>Create DID</Link>
-                            {/* <p>The total cost includes account deployment and gas fees for NFT minting.</p> */}
+                            <button
+                                onClick={onCreateDid}
+                                disabled={submitting}
+                                className={`w-full h-[57px] rounded-[42px] bg-[#05F292] flex items-center justify-center font-bold text-[16px] ${submitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            >
+                                {submitting ? 'Creating...' : 'Create DID'}
+                            </button>
                         </div>
                     </div>
                 </div>
