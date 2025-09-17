@@ -26,8 +26,8 @@ const CreateAnalysis = () => {
             setSubmitting(true)
             await createDID(address)
             router.push('/didcreate')
-        } catch (err: any) {
-            alert(err?.message || '创建 DID 失败')
+        } catch (err: unknown) {
+            alert(err instanceof Error ? err.message : '创建 DID 失败')
         } finally {
             setSubmitting(false)
         }
