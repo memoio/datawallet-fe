@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import Navigation from '../Reusable/Header'
 import Image from 'next/image'
 import GeneralModal from './Modal'
 
@@ -46,7 +45,6 @@ const CreateIndex = () => {
     return (
         <div className='relative'>
             <div className='flex w-full  px-[7%] flex-col pt-8 relative overflow-hidden'>
-                <Navigation />
                 <Image src={"/Images/Ellipse.svg"} className='absolute left-[-8%] lg:block hidden' width={507} height={371} alt='' />
                 <Image src={"/Images/right-ellipse.svg"} className='absolute right-[0px] lg:block hidden' width={347} height={371} alt='' />
                 <div className='flex flex-col items-center'>
