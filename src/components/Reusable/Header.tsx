@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react'
+import Link from 'next/link'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const Navigation = () => {
     return (
         <div className='flex flex-row items-center justify-between'>
-            <p className='lg:text-[28px] font-bold text-white'>MemoLabs</p>
+            <Link href='/' className='lg:text-[28px] font-bold text-white hover:text-[#05F292] transition-colors cursor-pointer'>
+                MemoLabs
+            </Link>
 
             <ConnectButton.Custom>
                 {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted, authenticationStatus }) => {
