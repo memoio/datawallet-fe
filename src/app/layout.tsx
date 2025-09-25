@@ -6,7 +6,8 @@ import { ReactNode } from "react";
 import dynamic from "next/dynamic";
 
 import { Inter } from "next/font/google";
-
+import { DIDProvider } from "@/components/context/DIDContext";
+import Navigation from "@/components/Reusable/Header";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +20,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <DIDProvider>
+            <div className="bg w-full">
+              <Navigation />
+            </div>
+            {children}
+          </DIDProvider>
+        </Providers>
       </body>
     </html>
   );
