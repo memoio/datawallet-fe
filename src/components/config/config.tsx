@@ -1,5 +1,7 @@
+export const DID_SERVER_URL = "https://did-test.memolabs.net";
+export const LOCAL_DID_SERVER_URL = "http://localhost:8080";
 
-export const BACKEND_URL = "http://localhost:8080";
+export const BACKEND_URL = DID_SERVER_URL;
 
 export const API_URL = {
     "CREATE_DID": BACKEND_URL + "/did/createadmin",
