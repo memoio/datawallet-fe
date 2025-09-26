@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi';
 import { useSignMessage } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { domainAvailable, domainGetBindMsg, domainBind, getDIDInfo, domainList } from '../api/api';
+import { domainAvailable, domainGetBindMsg, domainBind, domainList } from '../api/api';
 import type { Hex } from 'viem';
+import { useDID } from '@/components/context/DIDContext';
+
 
 const Cards = () => {
     const data = [
@@ -28,6 +30,9 @@ const Cards = () => {
     const { openConnectModal } = useConnectModal();
     const { signMessageAsync } = useSignMessage();
 
+    const { didInfo, hasDid } = useDID();
+    const did = didInfo?.did || '';
+
     // 输入与校验
     const [handle, setHandle] = useState('');
     const [checking, setChecking] = useState(false);
@@ -37,16 +42,7 @@ const Cards = () => {
     const [myDomains, setMyDomains] = useState<string[]>([]);
     const [loadingDomains, setLoadingDomains] = useState(false);
 
-    // DID
-    const [did, setDid] = useState<string>('');
-    useEffect(() => {
-        if (!address) { setDid(''); return; }
-        // 尝试从后端拉取 DID（根据你的接口结构挑字段）
-        getDIDInfo(address).then(info => {
-            const d = info?.did || info?.DID || info?.mdid || info?.id || '';
-            setDid(d || '');
-        }).catch(() => setDid(''));
-    }, [address]);
+
 
     useEffect(() => {
         if (!did) { setMyDomains([]); return; }
@@ -93,7 +89,7 @@ const Cards = () => {
     const onMint = async () => {
         try {
             if (!isConnected) { openConnectModal?.(); return; }
-            if (!did) { alert('缺少 DID'); return; }
+            if (!hasDid || !did) { alert('缺少 DID，请先创建 DID'); return; }   // 调整
             if (!available) { alert('域名不可用'); return; }
 
             setIsMinting(true);
@@ -177,13 +173,15 @@ const Cards = () => {
                             </div>
                             <button
                                 onClick={onMint}
-                                disabled={!isConnected || !did || isMinting}
-                                className={`w-full mt-4 rounded-full py-3 ${(!isConnected || !did || isMinting) ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#05F292] text-black hover:opacity-90'}`}
-                                title={!did ? '缺少 DID' : (!isConnected ? '请先连接钱包' : '')}
+                                disabled={!isConnected || !hasDid || isMinting}
+                                className={`w-full mt-4 rounded-full py-3 ${(!isConnected || !hasDid || isMinting) ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#05F292] text-black hover:opacity-90'}`}
+                                title={!hasDid ? '缺少 DID' : (!isConnected ? '请先连接钱包' : '')}
                             >
                                 {isMinting ? 'Minting…' : `Mint ${fullDomain || ''}`}
                             </button>
-
+                            {(!hasDid) && (
+                                <p className='mt-2 text-sm text-red-400'>当前账号尚未创建 DID，请先在首页创建 DID</p>
+                            )}
                             {/* 新增：我的已绑定域名 */}
                             {myDomains.length > 0 && (
                                 <div className='mt-6 text-white'>
